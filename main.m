@@ -1,7 +1,9 @@
 clear; clc; close all;
+plot = false;
 
 DIR   = './MOI Data/';
 FILES = dir(DIR);
+moments_of_inertia = zeros(1, length(FILES));
 
 for i = 1:length(FILES)
   f = FILES(i);
@@ -32,13 +34,21 @@ for i = 1:length(FILES)
   alpha = p(1); % slope of omega -> angular acceleration
   fit_omega = @(x) p(1).*x + p(2);
 
-  figure; hold on; grid on;
-  plot(t, real_torque)
-  plot(t, omega)
-  plot(t, fit_omega(t))
-  title(fname);
+  if(plot)
+    figure; hold on; grid on;
+    plot(t, real_torque)
+    plot(t, omega)
+    plot(t, fit_omega(t))
+    title(fname);
+  end
 
   % torque = I*alpha -> I = torque/alpha
   I = abs(mean(real_torque/alpha));
   fprintf('%s: I = %f\n', fname, I)
+
+  moments_of_inertia(i) = I;
 end
+
+moments_of_inertia = moments_of_inertia(moments_of_inertia ~= 0);
+fprintf('mean: %f\n', mean(moments_of_inertia))
+

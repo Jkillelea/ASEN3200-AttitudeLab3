@@ -1,5 +1,5 @@
 clear; clc; close all;
-plot = false;
+do_the_plot = false;
 
 DIR   = './MOI Data/';
 FILES = dir(DIR);
@@ -34,7 +34,7 @@ for i = 1:length(FILES)
   alpha = p(1); % slope of omega -> angular acceleration
   fit_omega = @(x) p(1).*x + p(2);
 
-  if(plot)
+  if(do_the_plot)
     figure; hold on; grid on;
     plot(t, real_torque)
     plot(t, omega)

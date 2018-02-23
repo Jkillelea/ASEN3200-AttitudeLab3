@@ -1,5 +1,5 @@
 clear; clc; close all;
-do_the_plot = false;
+do_the_plot = true;
 
 DIR   = './MOI Data/';
 FILES = dir(DIR);
@@ -19,7 +19,7 @@ for i = 1:length(FILES)
   data = data(2:end, :); % first row is all zeros no matter what, delete it
   t              = data(:, 1)/1000;      % seconds
   command_torque = data(:, 2)/1000;      % Nm
-  omega          = rpm2rads(data(:, 3)); % rad/sec
+  omega          = abs(rpm2rads(data(:, 3))); % rad/sec
   current        = data(:, 4);           % amps
 
   % select only where the motor is really running
@@ -36,10 +36,13 @@ for i = 1:length(FILES)
 
   if(do_the_plot)
     figure; hold on; grid on;
-    plot(t, real_torque)
-    plot(t, omega)
-    plot(t, fit_omega(t))
-    title(fname);
+    plot(t, 1000*real_torque, 'DisplayName', 'motor torque (mNm)')
+    plot(t, omega, 'DisplayName', 'angular velocity \omega (rad/s)')
+    plot(t, fit_omega(t), 'DisplayName', 'angular velocity linear fit')
+    xlabel('time (sec)')
+    title(['Trial ', fname])
+    legend('show', 'location', 'southeast')
+    print(['img/', fname], '-dpng')
   end
 
   % torque = I*alpha -> I = torque/alpha

@@ -53,5 +53,5 @@ for i = 1:length(FILES)
 end
 
 moments_of_inertia = moments_of_inertia(moments_of_inertia ~= 0);
-fprintf('mean: %f\n', mean(moments_of_inertia))
-
+fprintf('mean: %f kg m^2\n', mean(moments_of_inertia))
+fprintf('std dev: %f\n', std(moments_of_inertia))
